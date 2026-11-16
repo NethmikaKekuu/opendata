@@ -38,69 +38,28 @@ layout: default
                 {{ page.introduction }}
             </p>
 
-            <div class="grid grid-cols-1 {% if page.related_reports.size > 0 and page.related_blogs.size > 0 %}md:grid-cols-2{% endif %} gap-6"
-                {% unless page.related_reports.size> 0 and page.related_blogs.size > 0 %} style="width: 75%;"{%
-                endunless %}>
-                <!-- related reports -->
-                {% if page.related_reports and page.related_reports.size > 0 %}
-                <div class="flex flex-col gap-2">
-                    <h3 class="text-sm md:text-lg font-semibold text-accent tracking-wide mb-1">
-                        Related Reports
-                    </h3>
-                    <div style="margin-left: 10px;">
-                        {% for related_report in page.related_reports %}
-                        {% if related_report.url and related_report.url != "" %}
-                        <div class="flex gap-2 text-sm md:text-lg font-light text-sm md:text-lg font-light">
-                            <span class="text-gray-500">{{ forloop.index }}.</span>
-                            <span class="text-sm md:text-lg font-light text-gray-600">
-                                {{related_report.title}}
-                            </span>
-                            <div class="bg-gray-400"
-                                style="width: 2px; height: 24px; align-self: center; flex-shrink: 0; margin: 0 8px;">
-                            </div>
-                            <div class="text-sm flex justify-center items-center gap-4 ml-4">
-                                <a href="{{ related_report.url | relative_url }}" target="_blank"
-                                    class="cursor-pointer text-green-600">View</a>
-                                {% if related_report.hasDownload %}
-                                <a href="{{ related_report.url | replace: '/blob/', '/raw/' }}" target="_blank"
-                                    class="cursor-pointer text-green-600">Download</a>
-                                {% endif %}
-                            </div>
-                        </div>
+            {% assign has_related = false %}
+            {% if page.related_reports and page.related_reports.size > 0 %}{% assign has_related = true %}{% endif %}
+            {% if page.related_blogs and page.related_blogs.size > 0 %}{% assign has_related = true %}{% endif %}
+            {% if has_related %}
+            <div class="rc-grid">
+                {% for item in page.related_reports %}
+                    {% if item.url and item.url != "" %}
+                        {% assign dl = "" %}
+                        {% if item.hasDownload %}
+                            {% assign dl = item.url | replace: '/blob/', '/raw/' %}
                         {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
+                        {% include resource-card.html type="report" title=item.title url=item.url project=page.title download_url=dl %}
+                    {% endif %}
+                {% endfor %}
 
-                <!-- related blogs -->
-                {% if page.related_blogs and page.related_blogs.size > 0 %}
-                <div class="flex flex-col gap-2">
-                    <h3 class="text-sm md:text-lg font-semibold text-accent tracking-wide mb-1">
-                        Related Blogs
-                    </h3>
-                    <div style="margin-left: 10px;">
-                        {% for related_blog in page.related_blogs %}
-                        {% if related_blog.url and related_blog.url != "" %}
-                        <div class="flex gap-2 text-sm md:text-lg font-light">
-                            <span class="text-gray-500">{{ forloop.index }}.</span>
-                            <span class="text-sm md:text-lg font-light text-gray-600">
-                                {{related_blog.title}}
-                            </span>
-                            <div class="bg-gray-400"
-                                style="width: 2px; height: 24px; align-self: center; flex-shrink: 0; margin: 0 8px;">
-                            </div>
-                            <div class="text-sm flex justify-center items-center gap-4 ml-4">
-                                <a href="{{ related_blog.url | relative_url }}" target="_blank"
-                                    class="cursor-pointer text-green-600">View</a>
-                            </div>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-                {% endif %}
+                {% for item in page.related_blogs %}
+                    {% if item.url and item.url != "" %}
+                        {% include resource-card.html type="blog" title=item.title url=item.url project=page.title %}
+                    {% endif %}
+                {% endfor %}
             </div>
+            {% endif %}
         </section>
         {% endif %}
 
@@ -113,7 +72,7 @@ layout: default
 </article>
 
 <style>
-    .report-intro p::first-letter {
+    .report-intro > p::first-letter {
         float: left;
         font-size: 3.5rem;
         line-height: 0.85;

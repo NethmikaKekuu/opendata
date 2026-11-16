@@ -1,0 +1,112 @@
+<style>
+    .rc-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        margin-top: 24px;
+    }
+    .rc-card {
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+        flex-shrink: 0;
+        padding: 18px 20px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .rc-card:hover {
+        border-color: #cbd5e1;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    }
+    .rc-badge {
+        align-self: flex-start;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        padding: 3px 8px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+    .rc-badge--report  { background: #ecfdf5; color: #15803d; }
+    .rc-badge--blog    { background: #eff6ff; color: #1d4ed8; }
+    .rc-badge--dataset { background: #fef3c7; color: #b45309; }
+    .rc-project {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: #64748b;
+        margin: 0 0 6px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    .rc-title {
+        margin: 0 0 18px;
+        font-size: 16px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: #0f172a;
+    }
+    .rc-actions {
+        margin-top: auto;
+        padding-top: 12px;
+        border-top: 1px solid #f1f5f9;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 13.5px;
+        font-weight: 600;
+    }
+    .rc-link {
+        color: #1d4ed8;
+        text-decoration: none;
+    }
+    .rc-link:hover {
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+    .rc-link--secondary {
+        color: #475569;
+        text-decoration: none;
+    }
+    .rc-link--secondary:hover {
+        color: #0f172a;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+    }
+</style>
+
+{% comment %}
+  Resource Card — plug-and-play include.
+  Parameters:
+    include.title        — card heading (required)
+    include.url          — primary link (required)
+    include.type         — "report" | "blog" | "dataset" (required)
+    include.project      — project label shown below badge (optional)
+    include.download_url — secondary download link (optional)
+{% endcomment %}
+
+<article class="rc-card">
+    {% if include.type == "report" %}
+        <span class="rc-badge rc-badge--report">Report</span>
+    {% elsif include.type == "dataset" %}
+        <span class="rc-badge rc-badge--dataset">Dataset</span>
+    {% elsif include.type == "blog" %}
+        <span class="rc-badge rc-badge--blog">Blog</span>
+    {% endif %}
+
+    {% if include.project and include.project != "" %}
+    <p class="rc-project">{{ include.project }}</p>
+    {% endif %}
+
+    <h3 class="rc-title">{{ include.title }}</h3>
+
+    <div class="rc-actions">
+        <a href="{{ include.url }}" target="_blank" rel="noopener noreferrer" class="rc-link">View</a>
+        {% if include.download_url and include.download_url != "" %}
+        <a href="{{ include.download_url }}" target="_blank" rel="noopener noreferrer" class="rc-link rc-link--secondary">Download</a>
+        {% endif %}
+    </div>
+</article>
