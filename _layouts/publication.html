@@ -49,13 +49,13 @@ layout: default
                         {% if item.hasDownload %}
                             {% assign dl = item.url | replace: '/blob/', '/raw/' %}
                         {% endif %}
-                        {% include resource-card.html type="report" title=item.title url=item.url project=page.title download_url=dl %}
+                        {% include resource-card.html type="report" title=item.title url=item.url project=page.title download_url=dl external=item.external %}
                     {% endif %}
                 {% endfor %}
 
                 {% for item in page.related_blogs %}
                     {% if item.url and item.url != "" %}
-                        {% include resource-card.html type="blog" title=item.title url=item.url project=page.title %}
+                        {% include resource-card.html type="blog" title=item.title url=item.url project=page.title external=true %}
                     {% endif %}
                 {% endfor %}
             </div>

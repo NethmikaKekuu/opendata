@@ -121,7 +121,11 @@
     <h3 class="rc-title">{{ include.title }}</h3>
 
     <div class="rc-actions">
+        {% if include.external %}
         <a href="{{ include.url }}" target="_blank" rel="noopener noreferrer" class="rc-link">View</a>
+        {% else %}
+        <a href="{{ include.url | relative_url }}" class="rc-link">View</a>
+        {% endif %}
         {% if include.download_url and include.download_url != "" %}
         <a href="{{ include.download_url }}" target="_blank" rel="noopener noreferrer" class="rc-link rc-link--secondary">Download</a>
         {% endif %}
